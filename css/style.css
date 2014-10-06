@@ -1,0 +1,120 @@
+html, body {
+    margin: 0;
+    padding:0;
+}
+body {
+    height:100%;
+    background: url('../img/cf-bg.png');
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+button {
+    border: none;
+    cursor: pointer;
+}
+a:focus, button:focus {
+    outline: none;   
+}
+a {
+    color: #ccc;
+    text-decoration: none;
+}
+a:hover {
+    color: #fff;
+}
+a img {
+    border:none;
+}
+div.photo > div img {
+    width: 60%;
+    margin: 15px auto;   
+} 
+.swipe {
+    overflow: hidden;
+    visibility: hidden;
+    position: relative;
+}
+.swipe-wrap {
+    overflow: hidden;
+    position: relative;
+}
+.swipe-wrap > div {
+    float:left;
+    width:100%;
+    position: relative;
+}
+body.fullscreen div.photo {
+    padding-bottom: 10%;
+}
+div.photo {
+    width:100%;
+    padding-bottom: 5%;
+}
+div.photo img, div.photo div {
+    display: block;
+    margin: 0 auto;
+}
+div.photo div {
+    padding: 2em 3em 0 3em;
+    overflow: auto;
+    color: #fff;
+}
+div.current img, div.current div {
+    -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow:    0px 0px 30px rgba(0, 0, 0, 0.75);
+    box-shadow:         0px 0px 30px rgba(0, 0, 0, 0.75);
+}
+button.nav-btn {
+    position: absolute;
+    top: 250px;
+    margin-top:-25px;
+    width: 50px;
+    height:50px;
+}
+#logo {
+    position: absolute;
+    top:0;
+    left:0;
+    max-width: 50%;
+    z-index: 100;
+    font-size: 1.5em;
+}
+#logo img {
+    max-width: 100%;
+    opacity: 0.8;
+}
+#logo img:hover {
+    opacity: 1.0;
+}
+#menu {
+    position:absolute;
+    top: 25px;
+    right: 0;
+    z-index: 500;
+}
+#menu a {
+    padding: 2em 1.5em;
+}
+#menu a.full {
+    display: none;
+	cursor:pointer;
+}
+#next {
+    position: absolute;
+    right: 15px;
+    background: url('../img/next.png') no-repeat;
+}
+#prev {
+    position: absolute;
+    left: 15px;
+    background: url('../img/prev.png') no-repeat;
+}
+
+@media (max-width: 680px) {
+    #menu {
+        top:0;
+    }
+    #menu a {
+        font-size: 0.8em;
+    }
+}
