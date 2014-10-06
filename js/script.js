@@ -1,5 +1,29 @@
 var myJS = (function() {
 
+    var video;
+
+    var buildVideoElement = function(videoFilename, parentElement) {
+        $(parentElement).html('<div><video src="./videos/' + videoFilename + '.mp4" width="100%"></video>' +
+                              '<p class="progress-bar-color"></p><p class="time"></p></div>');
+        video = document.getElementsByTagName('video')[0];
+        _this.resize();
+
+    };
+
+    var togglePlay = function() {
+        if (this.paused) {
+            this.play();
+        } else {
+            this.pause();
+        }
+    };
+
+    var onTimeChange = function(event){
+
+        var percentage = Math.floor((100 / video.duration) * video.currentTime);
+        $('p.progress-bar-color').css('width', percentage + '%');
+    };
+
     var _this = {};
     
     _this.resize = function () {
@@ -24,6 +48,13 @@ var myJS = (function() {
         $('button.nav-btn').css('top', btnTop);
         marginTop = (windowHeight - $('div.photo > img, div.photo div').height()) * 0.5;
         $('div.photo > img, div.photo div').css('margin-top', marginTop);
+
+        window.setTimeout(function(){
+            var slideHeight = $(video).parent().height(),
+                videoHeight = $(video).height(),
+                videoMargin = (slideHeight - videoHeight) / 2;
+            $(video).css('margin-top', videoMargin);
+        }, 200);
     };
 
     _this.launchFullScreen = function(element) {
@@ -53,19 +84,35 @@ var myJS = (function() {
         $(thisPhoto).addClass('current');
     };
 
+    _this.playVideo = function () {
+        var videoFilename = this.getAttribute('data-video');
+        var parentElement = this.parentNode;
+        var originalContent = $(this).detach();
+
+        buildVideoElement(videoFilename, parentElement);
+        
+        $(video).on('timeupdate', onTimeChange);
+        video.play();
+        $(video).click(togglePlay);
+        $(video).on('ended', function(){
+            $(parentElement).html(originalContent);
+            $(parentElement).find('img').attr('src','./photos/' + videoFilename + '.jpg');
+        });
+    };
+
     return _this;
 })();
 
 
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-46841984-1']);
-_gaq.push(['_trackPageview']);
+// var _gaq = _gaq || [];
+// _gaq.push(['_setAccount', 'UA-46841984-1']);
+// _gaq.push(['_trackPageview']);
 
-(function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+// (function() {
+//     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+//     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+//     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+// })();
 
 $(document).ready(function () {
 
@@ -75,20 +122,20 @@ $(document).ready(function () {
             var newTitle = $('div.photo.current img').attr('alt');
             var position = mySwipe.getPos();
             document.title = "Michel Ickler - " + newTitle;
-            _gaq.push(['_trackEvent', 'Bild Navigation', position, newTitle]);
+            //_gaq.push(['_trackEvent', 'Bild Navigation', position, newTitle]);
         }
     });
 
     myJS.resize();
 
     $('a.external').on('click', function(){
-        _gaq.push(['_trackEvent', 'External Link', this.href, 'Externe Seite']);
+        //_gaq.push(['_trackEvent', 'External Link', this.href, 'Externe Seite']);
     });
     $('a.intern').on('click', function(){
-        _gaq.push(['_trackEvent', 'Internal Link', this.href, 'Interne Seite']);
+        //_gaq.push(['_trackEvent', 'Internal Link', this.href, 'Interne Seite']);
     });
     $('a.logo').on('click', function(){
-        _gaq.push(['_trackEvent', 'Internal Link', 'Home', 'Interne Seite']);
+        //_gaq.push(['_trackEvent', 'Internal Link', 'Home', 'Interne Seite']);
     });
 
     $('#next').on('click', mySwipe.next);
@@ -104,9 +151,11 @@ $(document).ready(function () {
         } else {
             myJS.launchFullScreen(document.documentElement);
             $('body').addClass('fullscreen');
-            _gaq.push(['_trackEvent', 'Fullscreen',  document.title, 'Fullscreen']);
+            //_gaq.push(['_trackEvent', 'Fullscreen',  document.title, 'Fullscreen']);
         }
     });
+
+    $('div.video img').on('click', myJS.playVideo);
 
     $(document.documentElement).keydown(function (e) {
 
