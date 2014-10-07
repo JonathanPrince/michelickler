@@ -54,7 +54,9 @@ div.photo img, div.photo div {
     display: block;
     margin: 0 auto;
 }
-div.photo div.home {
+div.photo div.home,
+div.photo div.about,
+div.photo div.impress {
     padding: 2em 3em 0 3em;
     overflow: auto;
     color: #fff;
